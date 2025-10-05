@@ -10,31 +10,29 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Calm Harmony -->
-    <!-- Application Structure Plan: 採用垂直滾動的單頁式應用(SPA)設計，頂部設有固定導覽列，便於用戶快速跳轉至「緣起」、「使命」、「團隊」和「藍圖」等關鍵部分。此結構旨在引導使用者循序漸進地理解數位賦能組的宏大願景，同時提供自由探索的彈性。透過卡片式佈局、互動圖表和頁籤切換，將抽象的策略轉化為具體、易於吸收的視覺資訊，強化敘事性與使用者參與感。 -->
+    <!-- Application Structure Plan: 採用自由滾動的單頁網頁模式，同時精心設計每個區塊的內容版面，使其在標準螢幕上能達到「一頁一畫面」的視覺效果，兼具簡報的清晰度與網頁的瀏覽自由度。頂部導覽列提供快速錨點跳轉，並透過IntersectionObserver實現滾動時的狀態追蹤。 -->
     <!-- Visualization & Content Choices: 
         1. 成立背景 -> Goal: Inform -> 3個互動式資訊卡片 -> Interaction: Hover效果 -> Justification: 比條列式清單更具視覺吸引力 -> Library/Method: HTML/CSS+Tailwind.
-        2. 使命與目標 -> Goal: Organize & Compare -> 圓餅圖(三院一體)與循環流程圖(能力循環) -> Interaction: 圖表Tooltips -> Justification: 直觀呈現「整合」與「持續進化」的核心概念 -> Library/Method: Chart.js Canvas, HTML/CSS.
-        3. 團隊成員 -> Goal: Inform -> 網格式卡片佈局 -> Interaction: Hover效果 -> Justification: 清晰、均等地介紹團隊核心成員 -> Library/Method: HTML/CSS+Tailwind.
+        2. 使命與目標 -> Goal: Organize & Compare -> 動態軌道圖(三院一體)與循環流程圖(能力循環) -> Interaction: CSS Animation -> Justification: 以更具象徵意義的動態視覺取代靜態圖形，生動演繹「連結」、「運轉」與「進化」的核心概念 -> Library/Method: HTML/CSS, HTML/CSS.
+        3. 團隊成員 -> Goal: Inform -> 整合式圖文佈局(照片+五位成員介紹) -> Interaction: CSS Animation (Fade-in & Shine on scroll) -> Justification: 完整介紹團隊所有成員及核心驅動力，並預告團隊的持續成長 -> Library/Method: HTML/CSS+Tailwind, JS IntersectionObserver.
         4. 執行藍圖 -> Goal: Organize & Show Process -> 互動頁籤(兩階段)與雷達圖(課程焦點) -> Interaction: 點擊切換頁籤內容 -> Justification: 有效區分不同階段的策略，並視覺化呈現多元的訓練方法 -> Library/Method: JS for tabs, Chart.js Canvas for radar chart. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body, html {
             font-family: 'Noto Sans TC', sans-serif;
-            scroll-snap-type: y mandatory;
-            overflow-y: scroll;
+            overflow-y: auto; 
             height: 100%;
-            background-color: #0f172a;
+            background-color: #f1f5f9; 
         }
         main > section, header, footer {
-            height: 100vh;
-            min-height: 700px;
+            min-height: 100vh; 
+            height: auto;
             width: 100%;
-            scroll-snap-align: start;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            padding: 7rem 2rem; 
             position: relative;
             overflow: hidden;
         }
@@ -68,11 +66,113 @@
             position: relative;
             z-index: 1;
             width: 100%;
-            max-width: 80rem; /* max-w-7xl */
+            max-width: 80rem; 
             margin-left: auto;
             margin-right: auto;
-            padding-left: 1.5rem; /* px-6 */
-            padding-right: 1.5rem; /* px-6 */
+            padding-left: 1.5rem; 
+            padding-right: 1.5rem; 
+        }
+        .photo-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem; 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            opacity: 0; 
+        }
+        .photo-container.is-visible {
+             animation: fadeInReveal 1.5s ease-out forwards;
+        }
+        .photo-container::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(25deg);
+            animation: shine 5s infinite 2s; 
+        }
+        .nav-link-active {
+            color: #2563eb; 
+            font-weight: 700;
+        }
+
+        .orbit-container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .orbit-center {
+            width: 150px;
+            height: 150px;
+            background-color: rgba(239, 246, 255, 0.7); 
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-weight: 700;
+            color: #1e3a8a;
+            z-index: 10;
+        }
+        .orbit-path {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px dashed #93c5fd; 
+            border-radius: 50%;
+            animation: rotate 30s linear infinite;
+        }
+        .orbit-node {
+            position: absolute;
+            width: 110px;
+            height: 50px;
+            background-color: white;
+            border-radius: 9999px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            color: white;
+        }
+        .node1 { top: -25px; left: calc(50% - 55px); background-color: #2563eb;}
+        .node2 { bottom: 30px; left: -20px; background-color: #3b82f6;}
+        .node3 { bottom: 30px; right: -20px; background-color: #60a5fa;}
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInReveal {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+                filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+                filter: drop-shadow(0 25px 25px rgba(0,0,0,0.25));
+            }
+        }
+
+        @keyframes shine {
+            0% { left: -60%; }
+            40% { left: 140%; }
+            100% { left: 140%; }
         }
     </style>
 </head>
@@ -82,16 +182,16 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0">
-                    <a href="#hero" class="flex items-center">
-                        <span class="font-black text-blue-600 text-xl">數位賦能組</span>
+                    <a href="#hero" class="nav-link flex items-center">
+                        <span class="font-black text-blue-600 text-xl">奇美醫院數位賦能組</span>
                     </a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#spark" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">為何而生</a>
-                        <a href="#mission" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">核心使命</a>
-                        <a href="#team" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">未來建築師</a>
-                        <a href="#roadmap" class="text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium">執行藍圖</a>
+                        <a href="#spark" class="nav-link text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">為何而生</a>
+                        <a href="#mission" class="nav-link text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">核心使命</a>
+                        <a href="#team" class="nav-link text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">核心成員</a>
+                        <a href="#roadmap" class="nav-link text-slate-600 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium">執行藍圖</a>
                     </div>
                 </div>
                 <div class="-mr-2 flex md:hidden">
@@ -105,10 +205,11 @@
         </div>
         <div class="hidden mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#spark" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">為何而生</a>
-                <a href="#mission" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">核心使命</a>
-                <a href="#team" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">未來建築師</a>
-                <a href="#roadmap" class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">執行藍圖</a>
+                 <a href="#hero" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">首頁</a>
+                <a href="#spark" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">為何而生</a>
+                <a href="#mission" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">核心使命</a>
+                <a href="#team" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">核心成員</a>
+                <a href="#roadmap" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-blue-500 hover:text-white">執行藍圖</a>
             </div>
         </div>
     </nav>
@@ -116,9 +217,8 @@
     <header id="hero" class="bg-slate-900 text-white">
         <canvas id="hero-canvas"></canvas>
         <div class="content-container text-center">
-            <p class="text-md font-semibold uppercase tracking-wider text-blue-400">Chi Mei Hospital Digital Empowerment Group</p>
-            <h1 class="text-5xl md:text-7xl font-black mt-4 mb-6 leading-tight">數位賦能，奇美再進化：<br>我們的未來宣言</h1>
-            <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto">
+            <h1 class="text-6xl md:text-8xl font-black mt-4 mb-6 leading-tight">數位賦能<br>奇美再進化</h1>
+            <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto mt-10">
                 我們不只成立一個小組，我們在回應一個時代的召喚。這是一場由內而外的數位變革，旨在為十年後的醫療環境備戰，並賦予每位同仁創造更高價值的力量。
             </p>
         </div>
@@ -128,8 +228,8 @@
         <section id="spark" class="bg-slate-50">
             <div class="content-container">
                 <div class="text-center mx-auto mb-12">
-                    <h2 class="text-4xl md:text-6xl font-bold mb-5 text-slate-800">PART 1 / THE SPARK - 為什麼是現在？</h2>
-                    <p class="text-slate-600 text-xl md:text-2xl max-w-5xl mx-auto">三大核心驅動力，定義了我們此刻行動的必要性與急迫性。這不僅是組織優化，更是對未來醫療格局的戰略佈局。</p>
+                    <h2 class="text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 1 / THE SPARK - 為什麼是現在？</h2>
+                    <p class="text-slate-600 text-lg md:text-xl max-w-5xl mx-auto">三大核心驅動力，定義了我們此刻行動的必要性與急迫性。這不僅是組織優化，更是對未來醫療格局的戰略佈局。</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
@@ -139,7 +239,7 @@
                     </div>
                     <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
                         <div class="text-6xl font-black text-blue-200 mb-5">02</div>
-                        <h3 class="text-2xl font-bold mb-3">💡 重定義「智慧醫療」的未來</h3>
+                        <h3 class="text-2xl font-bold mb-3">💡 重定義「智慧醫療」の未來</h3>
                         <p class="text-slate-600 text-lg">將智慧醫療從概念，真正拉升至<strong class="text-slate-800">全院戰略核心</strong>，並讓數位思維成為每位同仁的 DNA。</p>
                     </div>
                     <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
@@ -154,8 +254,7 @@
         <section id="mission" class="bg-white">
             <div class="content-container">
                 <div class="text-center mx-auto mb-10">
-                    <h2 class="text-4xl md:text-6xl font-bold mb-5 text-slate-800">PART 2 / THE NORTH STAR - 我們的核心使命</h2>
-                    <p class="text-slate-600 text-xl md:text-2xl max-w-5xl mx-auto">我們的使命清晰而宏大，旨在透過系統化的能力建構與資源整合，實現全院同仁的價值躍升。</p>
+                    <h2 class="text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 2 / THE NORTH STAR - 我們的核心使命</h2>
                 </div>
                 <div class="bg-blue-600 text-white py-8 px-6 rounded-2xl shadow-2xl text-center my-10">
                     <h3 class="text-3xl md:text-5xl font-black">「賦能每位夥伴，用數位創造自己的無限價值！」</h3>
@@ -163,7 +262,7 @@
                 </div>
                 <div class="grid lg:grid-cols-2 gap-10 items-center">
                     <div class="bg-slate-50 p-8 rounded-2xl flex flex-col h-full">
-                        <h3 class="text-2xl font-bold mb-4 text-center">🧭 打造能力循環：三個月一期的進階之旅</h3>
+                        <h3 class="text-2xl font-bold mb-4 text-center">🧭 打造能力循環：三個月一期の進階之旅</h3>
                         <p class="text-slate-600 text-lg text-center mb-6">我們將建立「基礎→中階→進階」的循環認證制度，透過週期性學習，讓數位能力持續進化，並推動院內外聯合認證。</p>
                         <div class="flex-grow flex flex-col items-center justify-center space-y-5">
                             <div class="flex items-center justify-center w-full space-x-3">
@@ -192,11 +291,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-slate-50 p-8 rounded-2xl">
+                    <div class="bg-slate-50 p-8 rounded-2xl flex flex-col h-full">
                         <h3 class="text-2xl font-bold mb-4 text-center">🌐 三院一體，同步進化</h3>
                         <p class="text-slate-600 text-lg text-center mb-4">我們的目標是實現三院區的進程同步，整合資源、協同作戰，共同邁向數位化的未來。</p>
-                        <div class="chart-container">
-                            <canvas id="campusChart"></canvas>
+                        <div class="flex-grow flex items-center justify-center w-full h-full p-4">
+                            <div class="orbit-container">
+                                <div class="orbit-center">
+                                    <span>持續優化</span>
+                                </div>
+                                <div class="orbit-path"></div>
+                                <div class="orbit-node node1">永康總院</div>
+                                <div class="orbit-node node2">柳營院區</div>
+                                <div class="orbit-node node3">佳里院區</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -206,37 +313,40 @@
         <section id="team" class="bg-slate-50">
             <div class="content-container">
                 <div class="text-center mx-auto mb-12">
-                    <h2 class="text-4xl md:text-6xl font-bold mb-5 text-slate-800">PART 3 / THE VANGUARD - 未來的建築師</h2>
-                    <p class="text-slate-600 text-xl md:text-2xl max-w-5xl mx-auto">我們不是功能小組，我們是奇美數位未來的核心引擎。每位成員都扮演著不可或缺的角色，以獨特的專業價值共同驅動變革。</p>
+                    <h2 class="text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 3 / THE VANGUARD - 核心成員</h2>
+                    <p class="text-slate-600 text-lg md:text-xl max-w-5xl mx-auto">每位成員都扮演著不可或缺的角色，以獨特的專業價值共同驅動變革。</p>
                 </div>
-                <div class="grid md:grid-cols-3 gap-10">
-                    <div class="bg-white text-center p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                        <div class="w-28 h-28 rounded-full mx-auto bg-slate-200 flex items-center justify-center mb-5">
-                            <span class="text-5xl">⚙️</span>
+                <div class="grid lg:grid-cols-5 gap-10 items-start">
+                    <div class="w-full lg:col-span-3">
+                        <div class="photo-container">
+                            <img src="https://raw.githubusercontent.com/Luyun1224/1141008/main/mb.jpg?raw=true" alt="核心成員照片" class="w-full h-auto object-cover">
                         </div>
-                        <h3 class="text-3xl font-bold text-blue-600">峰哥</h3>
-                        <p class="font-semibold text-slate-700 text-xl my-2">首席戰略官 & 技術領航員</p>
-                        <p class="text-md text-slate-500">定義技術路線、制定前瞻策略。專長於機器學習、預測模型與平台選型。</p>
-                    </div>
-                    <div class="bg-white text-center p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                        <div class="w-28 h-28 rounded-full mx-auto bg-slate-200 flex items-center justify-center mb-5">
-                            <span class="text-5xl">📚</span>
+                         <div class="mt-6 text-center bg-slate-200 text-slate-600 p-4 rounded-lg">
+                           <p class="font-semibold text-sm">這是一支集結各領域專家的菁英團隊，未来將持續邀請更多頂尖人才加入，共同引領變革。</p>
                         </div>
-                        <h3 class="text-3xl font-bold text-blue-600">博裕</h3>
-                        <p class="font-semibold text-slate-700 text-xl my-2">首席知識官 & 教學轉譯者</p>
-                        <p class="text-md text-slate-500">探索前沿知識、共筆未來教材。專長於橋接技術與教學的轉譯能力。</p>
                     </div>
-                    <div class="bg-white text-center p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                        <div class="w-28 h-28 rounded-full mx-auto bg-slate-200 flex items-center justify-center mb-5">
-                            <span class="text-5xl">🚀</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:col-span-2">
+                        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-blue-600 h-full">
+                            <h4 class="text-xl font-bold text-blue-700 mb-1">劉忠峰 召集人</h4>
+                            <p class="font-semibold text-slate-600 mb-2 text-sm">策略/技術決策者</p>
+                            <p class="text-slate-600 text-base">負責制定小組的整體策略方向與技術路線，確保我們的每一步都精準、有力。</p>
                         </div>
-                        <h3 class="text-3xl font-bold text-blue-600">Lulu</h3>
-                        <p class="font-semibold text-slate-700 text-xl my-2">首席執行官 & 落地催化劑</p>
-                        <p class="text-md text-slate-500">驅動專案進程、協調內外資源。專長於流程管理、活動策劃與成果落地。</p>
+                        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-blue-500 h-full">
+                            <h4 class="text-xl font-bold text-blue-600 mb-1">黃博裕 執行秘書</h4>
+                            <p class="font-semibold text-slate-600 mb-2 text-sm">奇美未來之星</p>
+                            <p class="text-slate-600 text-base">擁有強烈的好奇心與卓越的學習力，擅長將複雜的技術知識轉譯為易於理解的教材。</p>
+                        </div>
+                        <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-blue-400 h-full">
+                            <h4 class="text-xl font-bold text-blue-500 mb-1">盧英云 幹事</h4>
+                            <p class="font-semibold text-slate-600 mb-2 text-sm">執行推進與協調者</p>
+                            <p class="text-slate-600 text-base">作為團隊的運轉核心，負責專案的推進、資源協調與成果落地，確保所有規劃都能高效執行。</p>
+                        </div>
+                         <div class="bg-white p-5 rounded-xl shadow-lg border-t-4 border-green-500 h-full">
+                            <h4 class="text-xl font-bold text-green-700 mb-1">郭家穎 營養師 &amp;<br>李美娟 藥師</h4>
+                            <p class="font-semibold text-slate-600 mb-2 text-sm">專業領域賦能者 & 科部種子教師</p>
+                            <p class="text-slate-600 text-base">借重其數位賦能能力與專業知識，作為返回單位推動數位化轉型的重要關鍵角色。</p>
+                        </div>
                     </div>
-                </div>
-                 <div class="mt-12 text-center">
-                    <p class="text-xl font-bold bg-amber-200 text-amber-800 inline-block px-8 py-4 rounded-lg">我們的原則：不看資歷，只看你能為團隊創造的獨特價值。</p>
                 </div>
             </div>
         </section>
@@ -244,8 +354,8 @@
         <section id="roadmap" class="bg-white">
             <div class="content-container">
                 <div class="text-center mx-auto mb-12">
-                    <h2 class="text-4xl md:text-6xl font-bold mb-5 text-slate-800">PART 4 / THE ROADMAP - 我們的執行藍圖</h2>
-                    <p class="text-slate-600 text-xl md:text-2xl max-w-5xl mx-auto">這是一套從點燃火種到引爆變革的組合拳。我們將分階段、有策略地推動，確保每一步都穩健而有效。</p>
+                    <h2 class="text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 4 / THE ROADMAP - 我們的執行藍圖</h2>
+                    <p class="text-slate-600 text-lg md:text-xl max-w-5xl mx-auto">這是一套從點燃火種到引爆變革的組合拳。我們將分階段、有策略地推動，確保每一步都穩健而有效。</p>
                 </div>
 
                 <div class="w-full bg-slate-50 p-6 rounded-2xl">
@@ -296,7 +406,7 @@
                                          <div class="bg-blue-500 rounded-full h-10 w-10 z-10 text-white flex items-center justify-center text-xl font-bold">2</div>
                                          <div class="ml-6 bg-slate-100 p-5 rounded-lg shadow-sm w-full">
                                              <h4 class="font-bold text-slate-800 text-xl">創造「洛杉磯效應」</h4>
-                                             <p class="text-slate-600 text-lg mt-1">透過持續溝通與宣導，提升全員心理價值感，讓「數位賦能」成為院內最潮的話題。</p>
+                                             <p class="text-slate-600 text-lg mt-1">我們將積極把團隊成果帶到更大的舞台，引入外部的眼光與肯定。當努力被外界看見，成員的自豪感與內部能量將會倍增。</p>
                                          </div>
                                      </li>
                                      <li class="flex items-center">
@@ -315,21 +425,32 @@
         </section>
     </main>
 
-    <footer class="bg-slate-800 text-white">
+    <footer id="footer" class="bg-slate-800 text-white">
         <div class="content-container text-center">
-            <h2 class="text-5xl md:text-7xl font-black mb-6">這不只是一個小組，這是一場運動。</h2>
-            <h3 class="text-4xl md:text-6xl font-bold text-amber-400">未來，已來。你，來不來？</h3>
+            <h2 class="text-6xl md:text-7xl font-black mb-6">這不只是一個小組，這是一場運動。</h2>
+            <h3 class="text-5xl md:text-6xl font-bold text-amber-400">未來，已來。你，來不來？</h3>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Mobile menu
+            const navLinks = document.querySelectorAll('.nav-link');
+            const mobileMenu = document.querySelector(".mobile-menu");
+            
+            // Mobile menu toggle
             const btn = document.querySelector("button.mobile-menu-button");
-            const menu = document.querySelector(".mobile-menu");
             btn.addEventListener("click", () => {
-                menu.classList.toggle("hidden");
+                mobileMenu.classList.toggle("hidden");
             });
+
+            // Close mobile menu on link click
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                     if (!mobileMenu.classList.contains('hidden')) {
+                         mobileMenu.classList.add('hidden');
+                    }
+                })
+            })
 
             // Tabs
             const tabButtons = document.querySelectorAll('.tab-button');
@@ -349,35 +470,43 @@
                 });
             });
 
-            Chart.defaults.font.size = 14;
-            Chart.defaults.font.family = "'Noto Sans TC', sans-serif";
+            // Intersection Observer for scroll-spy and animations
+            const sections = document.querySelectorAll('main > section, header, footer');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
 
-            // Chart.js Implementations
-            const campusCtx = document.getElementById('campusChart');
-            if (campusCtx) {
-                new Chart(campusCtx, {
-                    type: 'doughnut', data: { labels: ['永康院區', '柳營院區', '佳里院區'], datasets: [{ label: '三院區', data: [1, 1, 1], backgroundColor: [ '#3b82f6', '#60a5fa', '#93c5fd' ], hoverOffset: 4 }] },
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        plugins: { 
-                            legend: { 
-                                position: 'bottom', 
-                                labels: {
-                                    font: { size: 16 }
-                                }
-                            }, 
-                            tooltip: { 
-                                bodyFont: { size: 14 },
-                                callbacks: { 
-                                    label: function(context) { return ` ${context.label}: 實現進程同步，同出同測`; } 
-                                } 
-                            } 
-                        } 
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const targetId = entry.target.id;
+                        
+                        // Update nav link active state
+                        navLinks.forEach(link => {
+                            link.classList.toggle('nav-link-active', link.getAttribute('href') === `#${targetId}`);
+                        });
+                        
+                        // Trigger animation for the team photo
+                        if (targetId === 'team') {
+                            const photoContainer = document.querySelector('.photo-container');
+                            if (photoContainer) {
+                                photoContainer.classList.add('is-visible');
+                            }
+                        }
                     }
                 });
-            }
+            }, observerOptions);
 
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+
+            Chart.defaults.font.size = 14;
+            Chart.defaults.font.family = "'Noto Sans TC', sans-serif";
+            
             const trainingFocusCtx = document.getElementById('trainingFocusChart');
             if (trainingFocusCtx) {
                 new Chart(trainingFocusCtx, {
