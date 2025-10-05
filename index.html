@@ -32,9 +32,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 7rem 2rem; 
+            padding: 7rem 1rem; 
             position: relative;
             overflow: hidden;
+        }
+        @media (min-width: 640px) {
+            main > section, header, footer {
+                padding: 7rem 2rem;
+            }
         }
         .chart-container {
             position: relative;
@@ -69,8 +74,14 @@
             max-width: 80rem; 
             margin-left: auto;
             margin-right: auto;
-            padding-left: 1.5rem; 
-            padding-right: 1.5rem; 
+            padding-left: 1rem; 
+            padding-right: 1rem; 
+        }
+        @media (min-width: 640px) {
+            .content-container {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
         }
         .photo-container {
             position: relative;
@@ -105,15 +116,21 @@
 
         .orbit-container {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 300px;
+            height: 300px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
+        @media (min-width: 640px) {
+            .orbit-container {
+                width: 350px;
+                height: 350px;
+            }
+        }
         .orbit-center {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             background-color: rgba(239, 246, 255, 0.7); 
             border-radius: 50%;
             display: flex;
@@ -123,6 +140,12 @@
             font-weight: 700;
             color: #1e3a8a;
             z-index: 10;
+        }
+         @media (min-width: 640px) {
+            .orbit-center {
+                width: 150px;
+                height: 150px;
+            }
         }
         .orbit-path {
             position: absolute;
@@ -136,8 +159,8 @@
         }
         .orbit-node {
             position: absolute;
-            width: 110px;
-            height: 50px;
+            width: 100px;
+            height: 45px;
             background-color: white;
             border-radius: 9999px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -145,11 +168,24 @@
             justify-content: center;
             align-items: center;
             font-weight: 600;
+            font-size: 0.875rem;
             color: white;
         }
-        .node1 { top: -25px; left: calc(50% - 55px); background-color: #2563eb;}
-        .node2 { bottom: 30px; left: -20px; background-color: #3b82f6;}
-        .node3 { bottom: 30px; right: -20px; background-color: #60a5fa;}
+         @media (min-width: 640px) {
+            .orbit-node {
+                width: 110px;
+                height: 50px;
+                font-size: 1rem;
+            }
+        }
+        .node1 { top: -22px; left: calc(50% - 50px); background-color: #2563eb;}
+        .node2 { bottom: 25px; left: -15px; background-color: #3b82f6;}
+        .node3 { bottom: 25px; right: -15px; background-color: #60a5fa;}
+         @media (min-width: 640px) {
+            .node1 { top: -25px; left: calc(50% - 55px); }
+            .node2 { bottom: 30px; left: -20px; }
+            .node3 { bottom: 30px; right: -20px; }
+        }
 
         @keyframes rotate {
             from { transform: rotate(0deg); }
@@ -183,7 +219,7 @@
             <div class="flex justify-between items-center h-16">
                 <div class="flex-shrink-0">
                     <a href="#hero" class="nav-link flex items-center">
-                        <span class="font-black text-blue-600 text-xl">奇美醫院數位賦能組</span>
+                        <span class="font-black text-blue-600 text-lg sm:text-xl">奇美醫院數位賦能組</span>
                     </a>
                 </div>
                 <div class="hidden md:block">
@@ -217,8 +253,8 @@
     <header id="hero" class="bg-slate-900 text-white">
         <canvas id="hero-canvas"></canvas>
         <div class="content-container text-center">
-            <h1 class="text-6xl md:text-8xl font-black mt-4 mb-6 leading-tight">數位賦能<br>奇美再進化</h1>
-            <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto mt-10">
+            <h1 class="text-5xl sm:text-6xl md:text-8xl font-black mt-4 mb-6 leading-tight">數位賦能<br>奇美再進化</h1>
+            <p class="text-lg sm:text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto mt-10">
                 我們不只成立一個小組，我們在回應一個時代的召喚。這是一場由內而外的數位變革，旨在為十年後的醫療環境備戰，並賦予每位同仁創造更高價值的力量。
             </p>
         </div>
@@ -228,24 +264,24 @@
         <section id="spark" class="bg-slate-50">
             <div class="content-container">
                 <div class="text-center mx-auto mb-12">
-                    <h2 class="text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 1 / THE SPARK - 為什麼是現在？</h2>
+                    <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 1 / THE SPARK - 為什麼是現在？</h2>
                     <p class="text-slate-600 text-lg md:text-xl max-w-5xl mx-auto">三大核心驅動力，定義了我們此刻行動的必要性與急迫性。這不僅是組織優化，更是對未來醫療格局的戰略佈局。</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                        <div class="text-6xl font-black text-blue-200 mb-5">01</div>
-                        <h3 class="text-2xl font-bold mb-3">🚀 從決策高地，啟動全院引擎</h3>
-                        <p class="text-slate-600 text-lg">我們隸屬醫教會，是能調用全院教學資源的<strong class="text-slate-800">決策單位</strong>。我們的戰場是<strong class="text-slate-800">三院區</strong>，目標是全體系的數位轉型。</p>
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-5xl sm:text-6xl font-black text-blue-200 mb-5">01</div>
+                        <h3 class="text-xl sm:text-2xl font-bold mb-3">🚀 從決策高地，啟動全院引擎</h3>
+                        <p class="text-slate-600 text-base sm:text-lg">我們隸屬醫教會，是能調用全院教學資源的<strong class="text-slate-800">決策單位</strong>。我們的戰場是<strong class="text-slate-800">三院區</strong>，目標是全體系的數位轉型。</p>
                     </div>
-                    <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                        <div class="text-6xl font-black text-blue-200 mb-5">02</div>
-                        <h3 class="text-2xl font-bold mb-3">💡 重定義「智慧醫療」の未來</h3>
-                        <p class="text-slate-600 text-lg">將智慧醫療從概念，真正拉升至<strong class="text-slate-800">全院戰略核心</strong>，並讓數位思維成為每位同仁的 DNA。</p>
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-5xl sm:text-6xl font-black text-blue-200 mb-5">02</div>
+                        <h3 class="text-xl sm:text-2xl font-bold mb-3">💡 重定義「智慧醫療」の未來</h3>
+                        <p class="text-slate-600 text-base sm:text-lg">將智慧醫療從概念，真正拉升至<strong class="text-slate-800">全院戰略核心</strong>，並讓數位思維成為每位同仁的 DNA。</p>
                     </div>
-                    <div class="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
-                        <div class="text-6xl font-black text-blue-200 mb-5">03</div>
-                        <h3 class="text-2xl font-bold mb-3">🔮 為「無病歷時代」備戰</h3>
-                        <p class="text-slate-600 text-lg">終極願景是在十年後，當手機處理一切時我們早已準備就緒，讓每位同仁都能在數位浪潮中<strong class="text-slate-800">放大自身價值</strong>。</p>
+                    <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-5xl sm:text-6xl font-black text-blue-200 mb-5">03</div>
+                        <h3 class="text-xl sm:text-2xl font-bold mb-3">🔮 為「無病歷時代」備戰</h3>
+                        <p class="text-slate-600 text-base sm:text-lg">終極願景是在十年後，當手機處理一切時我們早已準備就緒，讓每位同仁都能在數位浪潮中<strong class="text-slate-800">放大自身價值</strong>。</p>
                     </div>
                 </div>
             </div>
@@ -254,46 +290,46 @@
         <section id="mission" class="bg-white">
             <div class="content-container">
                 <div class="text-center mx-auto mb-10">
-                    <h2 class="text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 2 / THE NORTH STAR - 我們的核心使命</h2>
+                    <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 2 / THE NORTH STAR - 我們的核心使命</h2>
                 </div>
                 <div class="bg-blue-600 text-white py-8 px-6 rounded-2xl shadow-2xl text-center my-10">
                     <h3 class="text-3xl md:text-5xl font-black">「賦能每位夥伴，用數位創造自己的無限價值！」</h3>
-                    <p class="mt-3 text-blue-200 text-xl">這不僅是能力升級，更是價值重塑的開始。</p>
+                    <p class="mt-3 text-blue-200 text-lg sm:text-xl">這不僅是能力升級，更是價值重塑的開始。</p>
                 </div>
                 <div class="grid lg:grid-cols-2 gap-10 items-center">
-                    <div class="bg-slate-50 p-8 rounded-2xl flex flex-col h-full">
-                        <h3 class="text-2xl font-bold mb-4 text-center">🧭 打造能力循環：三個月一期の進階之旅</h3>
-                        <p class="text-slate-600 text-lg text-center mb-6">我們將建立「基礎→中階→進階」的循環認證制度，透過週期性學習，讓數位能力持續進化，並推動院內外聯合認證。</p>
+                    <div class="bg-slate-50 p-6 sm:p-8 rounded-2xl flex flex-col h-full">
+                        <h3 class="text-xl sm:text-2xl font-bold mb-4 text-center">🧭 打造能力循環：三個月一期の進階之旅</h3>
+                        <p class="text-slate-600 text-base sm:text-lg text-center mb-6">我們將建立「基礎→中階→進階」的循環認證制度，透過週期性學習，讓數位能力持續進化，並推動院內外聯合認證。</p>
                         <div class="flex-grow flex flex-col items-center justify-center space-y-5">
-                            <div class="flex items-center justify-center w-full space-x-3">
-                                <div class="flex-1 text-center p-4 border-2 border-blue-200 rounded-lg bg-white shadow-sm">
+                            <div class="flex items-center justify-center w-full space-x-2 sm:space-x-3">
+                                <div class="flex-1 text-center p-3 sm:p-4 border-2 border-blue-200 rounded-lg bg-white shadow-sm">
                                     <div class="text-xs text-blue-500 font-bold">LEVEL 1</div>
-                                    <div class="font-bold text-slate-800 text-lg">基礎紮根</div>
+                                    <div class="font-bold text-slate-800 text-base sm:text-lg">基礎紮根</div>
                                     <p class="text-xs text-slate-500 mt-1">打下堅實數位基礎</p>
                                 </div>
-                                <div class="px-1 text-blue-400 font-bold text-3xl">→</div>
-                                <div class="flex-1 text-center p-4 border-2 border-blue-400 rounded-lg bg-white shadow-sm">
+                                <div class="px-1 text-blue-400 font-bold text-2xl sm:text-3xl">→</div>
+                                <div class="flex-1 text-center p-3 sm:p-4 border-2 border-blue-400 rounded-lg bg-white shadow-sm">
                                     <div class="text-xs text-blue-600 font-bold">LEVEL 2</div>
-                                    <div class="font-bold text-slate-800 text-lg">中階應用</div>
+                                    <div class="font-bold text-slate-800 text-base sm:text-lg">中階應用</div>
                                     <p class="text-xs text-slate-500 mt-1">深化核心工具應用</p>
                                 </div>
-                                <div class="px-1 text-blue-400 font-bold text-3xl">→</div>
-                                 <div class="flex-1 text-center p-4 border-2 border-blue-600 rounded-lg bg-white shadow-sm">
+                                <div class="px-1 text-blue-400 font-bold text-2xl sm:text-3xl">→</div>
+                                 <div class="flex-1 text-center p-3 sm:p-4 border-2 border-blue-600 rounded-lg bg-white shadow-sm">
                                     <div class="text-xs text-blue-700 font-bold">LEVEL 3</div>
-                                    <div class="font-bold text-slate-800 text-lg">進階實戰</div>
+                                    <div class="font-bold text-slate-800 text-base sm:text-lg">進階實戰</div>
                                     <p class="text-xs text-slate-500 mt-1">挑戰真實工作專案</p>
                                 </div>
                             </div>
                             <div class="w-full flex justify-center items-center text-blue-500 pt-4">
-                                 <span class="text-5xl transform -scale-x-100 -rotate-45">⤷</span>
-                                 <span class="font-semibold text-xl mx-5">持續循環，不斷進化</span>
-                                 <span class="text-5xl rotate-45">⤷</span>
+                                 <span class="text-4xl sm:text-5xl transform -scale-x-100 -rotate-45">⤷</span>
+                                 <span class="font-semibold text-lg sm:text-xl mx-3 sm:mx-5">持續循環，不斷進化</span>
+                                 <span class="text-4xl sm:text-5xl rotate-45">⤷</span>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-slate-50 p-8 rounded-2xl flex flex-col h-full">
-                        <h3 class="text-2xl font-bold mb-4 text-center">🌐 三院一體，同步進化</h3>
-                        <p class="text-slate-600 text-lg text-center mb-4">我們的目標是實現三院區的進程同步，整合資源、協同作戰，共同邁向數位化的未來。</p>
+                    <div class="bg-slate-50 p-6 sm:p-8 rounded-2xl flex flex-col h-full">
+                        <h3 class="text-xl sm:text-2xl font-bold mb-4 text-center">🌐 三院一體，同步進化</h3>
+                        <p class="text-slate-600 text-base sm:text-lg text-center mb-4">我們的目標是實現三院區的進程同步，整合資源、協同作戰，共同邁向數位化的未來。</p>
                         <div class="flex-grow flex items-center justify-center w-full h-full p-4">
                             <div class="orbit-container">
                                 <div class="orbit-center">
@@ -313,7 +349,7 @@
         <section id="team" class="bg-slate-50">
             <div class="content-container">
                 <div class="text-center mx-auto mb-12">
-                    <h2 class="text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 3 / THE VANGUARD - 核心成員</h2>
+                    <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 3 / THE VANGUARD - 核心成員</h2>
                     <p class="text-slate-600 text-lg md:text-xl max-w-5xl mx-auto">每位成員都扮演著不可或缺的角色，以獨特的專業價值共同驅動變革。</p>
                 </div>
                 <div class="grid lg:grid-cols-5 gap-10 items-start">
@@ -354,7 +390,7 @@
         <section id="roadmap" class="bg-white">
             <div class="content-container">
                 <div class="text-center mx-auto mb-12">
-                    <h2 class="text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 4 / THE ROADMAP - 我們的執行藍圖</h2>
+                    <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-5 text-slate-800">PART 4 / THE ROADMAP - 我們的執行藍圖</h2>
                     <p class="text-slate-600 text-lg md:text-xl max-w-5xl mx-auto">這是一套從點燃火種到引爆變革的組合拳。我們將分階段、有策略地推動，確保每一步都穩健而有效。</p>
                 </div>
 
@@ -427,8 +463,8 @@
 
     <footer id="footer" class="bg-slate-800 text-white">
         <div class="content-container text-center">
-            <h2 class="text-6xl md:text-7xl font-black mb-6">這不只是一個小組，這是一場運動。</h2>
-            <h3 class="text-5xl md:text-6xl font-bold text-amber-400">未來，已來。你，來不來？</h3>
+            <h2 class="text-5xl sm:text-6xl md:text-7xl font-black mb-6">這不只是一個小組，這是一場運動。</h2>
+            <h3 class="text-4xl sm:text-5xl md:text-6xl font-bold text-amber-400">奇美的數位新時代，從這裡啟程。</h3>
         </div>
     </footer>
 
